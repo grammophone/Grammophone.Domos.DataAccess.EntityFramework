@@ -21,7 +21,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// <typeparam name="U">
 	/// The type of users. Must be derived from <see cref="User"/>.
 	/// </typeparam>
-	public abstract class EFDomosDomainContainer<U> : EFDomainContainer, IDomosComainContainer<U>
+	public abstract class EFDomosDomainContainer<U> : EFDomainContainer, IDomosDomainContainer<U>
 		where U : User
 	{
 		#region Construction
