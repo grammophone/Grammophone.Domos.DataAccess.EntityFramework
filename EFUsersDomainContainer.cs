@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 using Grammophone.DataAccess;
 using Grammophone.DataAccess.EntityFramework;
 using Grammophone.Domos.Domain;
-using Grammophone.Domos.Domain.Accounting;
-using Grammophone.Domos.Domain.Workflow;
 
 namespace Grammophone.Domos.DataAccess.EntityFramework
 {
 	/// <summary>
 	/// Entity Framework implementation of a Domos repository,
-	/// containing users, roles, accounting, workflow, managers and permissions.
+	/// containing users, roles, managers and permissions.
 	/// </summary>
 	/// <typeparam name="U">
 	/// The type of users. Must be derived from <see cref="User"/>.
@@ -24,14 +22,9 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// <typeparam name="S">
 	/// The type of segregations, derived from <see cref="Segregation{U}"/>.
 	/// </typeparam>
-	/// <typeparam name="ST">
-	/// The type of state transitions, derived from <see cref="StateTransition{U}"/>.
-	/// </typeparam>
-	public abstract class EFDomosDomainContainer<U, S, ST> 
-		: EFWorkflowUsersDomainContainer<U, S, ST>, IDomosDomainContainer<U, S, ST>
+	public class EFUsersDomainContainer<U, S> : EFDomainContainer, IUsersDomainContainer<U, S>
 		where U : User
 		where S : Segregation<U>
-		where ST : StateTransition<U>
 	{
 		#region Construction
 
@@ -42,7 +35,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// of the derived container class.
 		/// The <see cref="TransactionMode"/> is set to <see cref="TransactionMode.Real"/>.
 		/// </summary>
-		public EFDomosDomainContainer()
+		public EFUsersDomainContainer()
 		{
 		}
 
@@ -53,7 +46,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// of the derived container class.
 		/// </summary>
 		/// <param name="transactionMode">The transaction behavior.</param>
-		public EFDomosDomainContainer(TransactionMode transactionMode)
+		public EFUsersDomainContainer(TransactionMode transactionMode)
 			: base(transactionMode)
 		{
 		}
@@ -66,10 +59,9 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// <param name="nameOrConnectionString">
 		/// Either the database name or a connection string.
 		/// </param>
-		public EFDomosDomainContainer(string nameOrConnectionString)
+		public EFUsersDomainContainer(string nameOrConnectionString)
 			: base(nameOrConnectionString)
 		{
-
 		}
 
 		/// <summary>
@@ -80,7 +72,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// Either the database name or a connection string.
 		/// </param>
 		/// <param name="transactionMode">The transaction behavior.</param>
-		public EFDomosDomainContainer(string nameOrConnectionString, TransactionMode transactionMode)
+		public EFUsersDomainContainer(string nameOrConnectionString, TransactionMode transactionMode)
 			: base(nameOrConnectionString, transactionMode)
 		{
 		}
@@ -91,7 +83,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// <param name="connection">The connection to use.</param>
 		/// <param name="ownTheConnection">If true, hand over connection ownership to the container.</param>
 		/// <param name="transactionMode">The transaction behavior.</param>
-		public EFDomosDomainContainer(System.Data.Common.DbConnection connection, bool ownTheConnection, TransactionMode transactionMode)
+		public EFUsersDomainContainer(System.Data.Common.DbConnection connection, bool ownTheConnection, TransactionMode transactionMode)
 			: base(connection, ownTheConnection, transactionMode)
 		{
 		}
@@ -101,34 +93,47 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		#region Public properties
 
 		/// <summary>
-		/// Entity set of accounts in the system.
+		/// Entity set of users in the system.
 		/// </summary>
-		public IDbSet<Account> Accounts { get; set; }
+		public IDbSet<U> Users { get; set; }
 
 		/// <summary>
-		/// Entity set of accounting batches in the system.
+		/// Entity set of registrations in the system.
 		/// </summary>
-		public IDbSet<Batch> Batches { get; set; }
+		public IDbSet<Registration> Registrations { get; set; }
 
 		/// <summary>
-		/// Entity set of remittances belonging to a batch in the system.
+		/// Entity set of roles in the system.
 		/// </summary>
-		public IDbSet<BatchRemittance<U>> BatchRemittances { get; set; }
+		public IDbSet<Role> Roles { get; set; }
 
 		/// <summary>
-		/// Entity set of credit systems in the system.
+		/// Entity set of entity accesses in the system,
+		/// only used if defined in database.
 		/// </summary>
-		public IDbSet<CreditSystem> CreditSystems { get; set; }
+		public IDbSet<EntityAccess> EntityAccesses { get; set; }
 
 		/// <summary>
-		/// Entity set of accounting journals in the system.
+		/// Entity set of manager accesses in the system,
+		/// only used if defined in database.
 		/// </summary>
-		public IDbSet<Journal> Journals { get; set; }
+		public IDbSet<ManagerAccess> ManagerAccesses { get; set; }
 
 		/// <summary>
-		/// Entity set of accounting journal lines in the system.
+		/// Entity set of permissions in the system,
+		/// only used if defined in database.
 		/// </summary>
-		public IDbSet<JournalLine> JournalLines { get; set; }
+		public IDbSet<Permission> Permissions { get; set; }
+
+		/// <summary>
+		/// Entity set of segregations in the system.
+		/// </summary>
+		public IDbSet<S> Segregations { get; set; }
+
+		/// <summary>
+		/// Entity set of dispositions in the system.
+		/// </summary>
+		public IDbSet<Disposition> Dispositions { get; set; }
 
 		#endregion
 
@@ -140,6 +145,40 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
+
+			#region User
+
+			modelBuilder.Entity<U>()
+				.Property(u => u.Email)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_User_Email") { IsUnique = true }));
+
+			modelBuilder.Entity<U>()
+				.Property(u => u.UserName)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_User_UserName") { IsUnique = true }));
+
+			modelBuilder.Entity<U>()
+				.Property(u => u.CreationDate)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_User_CreationDate")));
+
+			modelBuilder.Entity<User>()
+				.HasMany(u => u.Dispositions)
+				.WithRequired(d => d.OwningUser);
+
+			#endregion
+
+			#region Registration
+
+			modelBuilder.Entity<Registration>()
+				.Property(r => r.Provider)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Registration_Provider_ProviderKey", 1) { IsUnique = true }));
+
+			modelBuilder.Entity<Registration>()
+				.Property(r => r.ProviderKey)
+				.HasMaxLength(128)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Registration_Provider_ProviderKey", 2) { IsUnique = true }));
+
+			#endregion
+
 		}
 
 		#endregion

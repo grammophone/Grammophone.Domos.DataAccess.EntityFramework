@@ -52,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EFDomosDomainContainer.cs" />
+    <Compile Include="EFUsersDomainContainer.cs" />
+    <Compile Include="EFWorkflowUsersDomainContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

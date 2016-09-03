@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure.Annotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grammophone.DataAccess;
-using Grammophone.DataAccess.EntityFramework;
 using Grammophone.Domos.Domain;
-using Grammophone.Domos.Domain.Accounting;
 using Grammophone.Domos.Domain.Workflow;
 
 namespace Grammophone.Domos.DataAccess.EntityFramework
 {
 	/// <summary>
 	/// Entity Framework implementation of a Domos repository,
-	/// containing users, roles, accounting, workflow, managers and permissions.
+	/// containing users, roles, managers and permissions.
 	/// </summary>
 	/// <typeparam name="U">
 	/// The type of users. Must be derived from <see cref="User"/>.
@@ -27,8 +23,8 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// <typeparam name="ST">
 	/// The type of state transitions, derived from <see cref="StateTransition{U}"/>.
 	/// </typeparam>
-	public abstract class EFDomosDomainContainer<U, S, ST> 
-		: EFWorkflowUsersDomainContainer<U, S, ST>, IDomosDomainContainer<U, S, ST>
+	public class EFWorkflowUsersDomainContainer<U, S, ST> 
+		: EFUsersDomainContainer<U, S>, IWorkflowUsersDomainContainer<U, S, ST>
 		where U : User
 		where S : Segregation<U>
 		where ST : StateTransition<U>
@@ -42,7 +38,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// of the derived container class.
 		/// The <see cref="TransactionMode"/> is set to <see cref="TransactionMode.Real"/>.
 		/// </summary>
-		public EFDomosDomainContainer()
+		public EFWorkflowUsersDomainContainer()
 		{
 		}
 
@@ -53,7 +49,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// of the derived container class.
 		/// </summary>
 		/// <param name="transactionMode">The transaction behavior.</param>
-		public EFDomosDomainContainer(TransactionMode transactionMode)
+		public EFWorkflowUsersDomainContainer(TransactionMode transactionMode)
 			: base(transactionMode)
 		{
 		}
@@ -66,7 +62,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// <param name="nameOrConnectionString">
 		/// Either the database name or a connection string.
 		/// </param>
-		public EFDomosDomainContainer(string nameOrConnectionString)
+		public EFWorkflowUsersDomainContainer(string nameOrConnectionString)
 			: base(nameOrConnectionString)
 		{
 
@@ -80,7 +76,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// Either the database name or a connection string.
 		/// </param>
 		/// <param name="transactionMode">The transaction behavior.</param>
-		public EFDomosDomainContainer(string nameOrConnectionString, TransactionMode transactionMode)
+		public EFWorkflowUsersDomainContainer(string nameOrConnectionString, TransactionMode transactionMode)
 			: base(nameOrConnectionString, transactionMode)
 		{
 		}
@@ -91,7 +87,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// <param name="connection">The connection to use.</param>
 		/// <param name="ownTheConnection">If true, hand over connection ownership to the container.</param>
 		/// <param name="transactionMode">The transaction behavior.</param>
-		public EFDomosDomainContainer(System.Data.Common.DbConnection connection, bool ownTheConnection, TransactionMode transactionMode)
+		public EFWorkflowUsersDomainContainer(System.Data.Common.DbConnection connection, bool ownTheConnection, TransactionMode transactionMode)
 			: base(connection, ownTheConnection, transactionMode)
 		{
 		}
@@ -101,34 +97,29 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		#region Public properties
 
 		/// <summary>
-		/// Entity set of accounts in the system.
+		/// Entity set of workflow states in the system.
 		/// </summary>
-		public IDbSet<Account> Accounts { get; set; }
+		public IDbSet<State> State { get; set; }
 
 		/// <summary>
-		/// Entity set of accounting batches in the system.
+		/// Entity set of workflow state groups in the system.
 		/// </summary>
-		public IDbSet<Batch> Batches { get; set; }
+		public IDbSet<StateGroup> StateGroups { get; set; }
 
 		/// <summary>
-		/// Entity set of remittances belonging to a batch in the system.
+		/// Entity set of workflow state paths in the system.
 		/// </summary>
-		public IDbSet<BatchRemittance<U>> BatchRemittances { get; set; }
+		public IDbSet<StatePath> StatePaths { get; set; }
 
 		/// <summary>
-		/// Entity set of credit systems in the system.
+		/// Entity set of transitions occurred between workflow states in the system.
 		/// </summary>
-		public IDbSet<CreditSystem> CreditSystems { get; set; }
+		public IDbSet<ST> StateTransitions { get; set; }
 
 		/// <summary>
-		/// Entity set of accounting journals in the system.
+		/// Entity set of workflow graphs in the system.
 		/// </summary>
-		public IDbSet<Journal> Journals { get; set; }
-
-		/// <summary>
-		/// Entity set of accounting journal lines in the system.
-		/// </summary>
-		public IDbSet<JournalLine> JournalLines { get; set; }
+		public IDbSet<WorkflowGraph> WorkflowGraphs { get; set; }
 
 		#endregion
 
@@ -140,6 +131,15 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
+
+			#region StateTransition
+
+			modelBuilder.Entity<ST>()
+				.HasMany(st => st.OwningUsers)
+				.WithMany()
+				.Map(m => m.ToTable("UserStateTransitions"));
+
+			#endregion
 		}
 
 		#endregion
