@@ -21,16 +21,12 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// <typeparam name="U">
 	/// The type of users. Must be derived from <see cref="User"/>.
 	/// </typeparam>
-	/// <typeparam name="S">
-	/// The type of segregations, derived from <see cref="Segregation{U}"/>.
-	/// </typeparam>
 	/// <typeparam name="ST">
 	/// The type of state transitions, derived from <see cref="StateTransition{U}"/>.
 	/// </typeparam>
-	public abstract class EFDomosDomainContainer<U, S, ST> 
-		: EFWorkflowUsersDomainContainer<U, S, ST>, IDomosDomainContainer<U, S, ST>
+	public abstract class EFDomosDomainContainer<U, ST> 
+		: EFWorkflowUsersDomainContainer<U, ST>, IDomosDomainContainer<U, ST>
 		where U : User
-		where S : Segregation<U>
 		where ST : StateTransition<U>
 	{
 		#region Construction

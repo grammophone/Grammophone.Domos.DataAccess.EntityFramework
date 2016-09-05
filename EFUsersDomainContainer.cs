@@ -19,12 +19,8 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// <typeparam name="U">
 	/// The type of users. Must be derived from <see cref="User"/>.
 	/// </typeparam>
-	/// <typeparam name="S">
-	/// The type of segregations, derived from <see cref="Segregation{U}"/>.
-	/// </typeparam>
-	public class EFUsersDomainContainer<U, S> : EFDomainContainer, IUsersDomainContainer<U, S>
+	public class EFUsersDomainContainer<U> : EFDomainContainer, IUsersDomainContainer<U>
 		where U : User
-		where S : Segregation<U>
 	{
 		#region Construction
 
@@ -124,11 +120,6 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// only used if defined in database.
 		/// </summary>
 		public IDbSet<Permission> Permissions { get; set; }
-
-		/// <summary>
-		/// Entity set of segregations in the system.
-		/// </summary>
-		public IDbSet<S> Segregations { get; set; }
 
 		/// <summary>
 		/// Entity set of dispositions in the system.
