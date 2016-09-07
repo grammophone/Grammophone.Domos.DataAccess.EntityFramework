@@ -24,10 +24,20 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// <typeparam name="ST">
 	/// The type of state transitions, derived from <see cref="StateTransition{U}"/>.
 	/// </typeparam>
-	public abstract class EFDomosDomainContainer<U, ST> 
-		: EFWorkflowUsersDomainContainer<U, ST>, IDomosDomainContainer<U, ST>
+	/// <typeparam name="A">The type of accounts, derived from <see cref="Account{U}"/>.</typeparam>
+	/// <typeparam name="P">The type of the postings, derived from <see cref="Posting{U, A}"/>.</typeparam>
+	/// <typeparam name="R">The type of remittances, derived from <see cref="Remittance{U, A}"/>.</typeparam>
+	/// <typeparam name="J">
+	/// The type of accounting journals, derived from <see cref="Journal{U, ST, A, P, R}"/>.
+	/// </typeparam>
+	public abstract class EFDomosDomainContainer<U, ST, A, P, R, J> 
+		: EFWorkflowUsersDomainContainer<U, ST>, IDomosDomainContainer<U, ST, A, P, R, J>
 		where U : User
 		where ST : StateTransition<U>
+		where A : Account<U>
+		where P : Posting<U, A>
+		where R : Remittance<U, A>
+		where J : Journal<U, ST, A, P, R>
 	{
 		#region Construction
 
@@ -99,17 +109,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// <summary>
 		/// Entity set of accounts in the system.
 		/// </summary>
-		public IDbSet<Account> Accounts { get; set; }
-
-		/// <summary>
-		/// Entity set of accounting batches in the system.
-		/// </summary>
-		public IDbSet<Batch> Batches { get; set; }
-
-		/// <summary>
-		/// Entity set of remittances belonging to a batch in the system.
-		/// </summary>
-		public IDbSet<BatchRemittance<U>> BatchRemittances { get; set; }
+		public IDbSet<A> Accounts { get; set; }
 
 		/// <summary>
 		/// Entity set of credit systems in the system.
@@ -119,12 +119,17 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// <summary>
 		/// Entity set of accounting journals in the system.
 		/// </summary>
-		public IDbSet<Journal> Journals { get; set; }
+		public IDbSet<J> Journals { get; set; }
 
 		/// <summary>
-		/// Entity set of accounting journal lines in the system.
+		/// Entity set of the accounting postings in the system.
 		/// </summary>
-		public IDbSet<JournalLine> JournalLines { get; set; }
+		public IDbSet<P> Postings { get; set; }
+
+		/// <summary>
+		/// Entity set of the accounting remittances in the system.
+		/// </summary>
+		public IDbSet<R> Remittances { get; set; }
 
 		#endregion
 
@@ -136,6 +141,75 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
+
+			#region Account
+
+			modelBuilder.Entity<A>()
+				.HasMany(a => a.OwningUsers)
+				.WithMany()
+				.Map(m => m.ToTable("AccountsToOwners"));
+
+			modelBuilder.Entity<A>()
+				.Property(a => a.LastModificationDate)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Account_LastModificationDate")));
+
+			#endregion
+
+			#region CreditSystem
+
+			modelBuilder.Entity<CreditSystem>()
+				.Property(cs => cs.Code)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_CreditSystem_Code") { IsUnique = true }));
+
+			#endregion
+
+			#region Journal
+
+			modelBuilder.Entity<J>()
+				.Property(p => p.CreationDate)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Journal_CreationDate")));
+
+			modelBuilder.Entity<J>()
+				.HasMany(j => j.OwningUsers)
+				.WithMany()
+				.Map(m => m.ToTable("JournalsToOwners"));
+
+			#endregion
+
+			#region Posting
+
+			modelBuilder.Entity<P>()
+				.Property(p => p.CreationDate)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Posting_CreationDate")));
+
+			modelBuilder.Entity<P>()
+				.HasMany(p => p.OwningUsers)
+				.WithMany()
+				.Map(m => m.ToTable("PostingsToOwners"));
+
+			#endregion
+
+			#region Remittance
+
+			modelBuilder.Entity<R>()
+				.Property(r => r.TransactionID)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Remittance_TransactionID_LineID", 1) { IsUnique = true }));
+
+			modelBuilder.Entity<R>()
+				.Property(r => r.LineID)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Remittance_TransactionID_LineID", 2) { IsUnique = true }));
+
+			modelBuilder.Entity<R>()
+				.Property(r => r.CreationDate)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Remittance_CreationDate")));
+
+			modelBuilder.Entity<R>()
+				.HasMany(r => r.OwningUsers)
+				.WithMany()
+				.Map(m => m.ToTable("RemittancesToOwners"));
+
+			#endregion
+
 		}
 
 		#endregion

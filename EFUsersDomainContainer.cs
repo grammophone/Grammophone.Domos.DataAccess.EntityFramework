@@ -152,6 +152,11 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_User_CreationDate")));
 
 			modelBuilder.Entity<User>()
+				.HasMany(u => u.Roles)
+				.WithMany()
+				.Map(m => m.ToTable("UsersToRoles"));
+
+			modelBuilder.Entity<User>()
 				.HasMany(u => u.Dispositions)
 				.WithRequired(d => d.OwningUser);
 

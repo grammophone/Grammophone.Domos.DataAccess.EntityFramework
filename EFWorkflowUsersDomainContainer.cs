@@ -133,7 +133,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 			modelBuilder.Entity<ST>()
 				.HasMany(st => st.OwningUsers)
 				.WithMany()
-				.Map(m => m.ToTable("UserStateTransitions"));
+				.Map(m => m.ToTable("StateTransitionsToOwners"));
 
 			#endregion
 		}
