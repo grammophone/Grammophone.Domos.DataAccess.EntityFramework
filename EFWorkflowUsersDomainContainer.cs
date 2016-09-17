@@ -95,7 +95,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// <summary>
 		/// Entity set of workflow states in the system.
 		/// </summary>
-		public IDbSet<State> State { get; set; }
+		public IDbSet<State> States { get; set; }
 
 		/// <summary>
 		/// Entity set of workflow state groups in the system.
