@@ -158,8 +158,8 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 			#region CreditSystem
 
 			modelBuilder.Entity<CreditSystem>()
-				.Property(cs => cs.Code)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_CreditSystem_Code") { IsUnique = true }));
+				.Property(cs => cs.CodeName)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_CreditSystem_CodeName") { IsUnique = true }));
 
 			#endregion
 
@@ -209,7 +209,6 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.Map(m => m.ToTable("RemittancesToOwners"));
 
 			#endregion
-
 		}
 
 		#endregion
