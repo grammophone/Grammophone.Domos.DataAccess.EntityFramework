@@ -30,6 +30,10 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// <typeparam name="J">
 	/// The type of accounting journals, derived from <see cref="Journal{U, ST, A, P, R}"/>.
 	/// </typeparam>
+	/// <remarks>
+	/// The global cascade delete convention is turned off. When needed, please enable
+	/// cascade delete on a per entity basis by overriding <see cref="OnModelCreating(DbModelBuilder)"/>.
+	/// </remarks>
 	public abstract class EFDomosDomainContainer<U, ST, A, P, R, J> 
 		: EFWorkflowUsersDomainContainer<U, ST>, IDomosDomainContainer<U, ST, A, P, R, J>
 		where U : User

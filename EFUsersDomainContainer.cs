@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure.Annotations;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,10 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// <typeparam name="U">
 	/// The type of users. Must be derived from <see cref="User"/>.
 	/// </typeparam>
+	/// <remarks>
+	/// The global cascade delete convention is turned off. When needed, please enable
+	/// cascade delete on a per entity basis by overriding <see cref="OnModelCreating(DbModelBuilder)"/>.
+	/// </remarks>
 	public class EFUsersDomainContainer<U> : EFDomainContainer, IUsersDomainContainer<U>
 		where U : User
 	{
@@ -136,6 +141,12 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
+
+			#region Global conventions
+
+			modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+
+			#endregion
 
 			#region User
 

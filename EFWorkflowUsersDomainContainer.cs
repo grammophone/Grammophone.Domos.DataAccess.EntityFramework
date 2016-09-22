@@ -20,6 +20,10 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// <typeparam name="ST">
 	/// The type of state transitions, derived from <see cref="StateTransition{U}"/>.
 	/// </typeparam>
+	/// <remarks>
+	/// The global cascade delete convention is turned off. When needed, please enable
+	/// cascade delete on a per entity basis by overriding <see cref="OnModelCreating(DbModelBuilder)"/>.
+	/// </remarks>
 	public class EFWorkflowUsersDomainContainer<U, ST> 
 		: EFUsersDomainContainer<U>, IWorkflowUsersDomainContainer<U, ST>
 		where U : User
