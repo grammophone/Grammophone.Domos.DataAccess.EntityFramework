@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Grammophone.DataAccess;
 using Grammophone.DataAccess.EntityFramework;
 using Grammophone.Domos.Domain;
+using Grammophone.Domos.Domain.Files;
 
 namespace Grammophone.Domos.DataAccess.EntityFramework
 {
@@ -113,6 +114,16 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// </summary>
 		public IDbSet<Disposition> Dispositions { get; set; }
 
+		/// <summary>
+		/// The MIME content types in the system.
+		/// </summary>
+		public IDbSet<ContentType> ContentTypes { get; set; }
+
+		/// <summary>
+		/// The files in the system.
+		/// </summary>
+		public IDbSet<File> Files { get; set; }
+
 		#endregion
 
 		#region Protected methods
@@ -168,6 +179,20 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 
 			#endregion
 
+			#region ContentType
+
+			modelBuilder.Entity<ContentType>()
+				.Property(ct => ct.MIME)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_ContentType_MIME") { IsUnique = true }));
+
+			#endregion
+
+			#region File
+
+			// File is abstract; derive from it and define your own entity set.
+			modelBuilder.Ignore<File>();
+
+			#endregion
 		}
 
 		#endregion
