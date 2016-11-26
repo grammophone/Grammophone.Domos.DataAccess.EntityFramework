@@ -17,17 +17,17 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// <typeparam name="U">
 	/// The type of users. Must be derived from <see cref="User"/>.
 	/// </typeparam>
-	/// <typeparam name="ST">
-	/// The type of state transitions, derived from <see cref="StateTransition{U}"/>.
+	/// <typeparam name="BST">
+	/// The base type of the system's state transitions, derived from <see cref="StateTransition{U}"/>.
 	/// </typeparam>
 	/// <remarks>
 	/// The global cascade delete convention is turned off. When needed, please enable
 	/// cascade delete on a per entity basis by overriding <see cref="OnModelCreating(DbModelBuilder)"/>.
 	/// </remarks>
-	public class EFWorkflowUsersDomainContainer<U, ST> 
-		: EFUsersDomainContainer<U>, IWorkflowUsersDomainContainer<U, ST>
+	public class EFWorkflowUsersDomainContainer<U, BST> 
+		: EFUsersDomainContainer<U>, IWorkflowUsersDomainContainer<U, BST>
 		where U : User
-		where ST : StateTransition<U>
+		where BST : StateTransition<U>
 	{
 		#region Construction
 
@@ -114,7 +114,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// <summary>
 		/// Entity set of transitions occurred between workflow states in the system.
 		/// </summary>
-		public IDbSet<ST> StateTransitions { get; set; }
+		public IDbSet<BST> StateTransitions { get; set; }
 
 		/// <summary>
 		/// Entity set of workflow graphs in the system.
@@ -134,7 +134,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 
 			#region StateTransition
 
-			modelBuilder.Entity<ST>()
+			modelBuilder.Entity<BST>()
 				.HasMany(st => st.OwningUsers)
 				.WithMany()
 				.Map(m => m.ToTable("StateTransitionsToOwners"));

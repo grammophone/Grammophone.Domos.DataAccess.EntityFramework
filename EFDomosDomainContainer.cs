@@ -21,8 +21,8 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// <typeparam name="U">
 	/// The type of users. Must be derived from <see cref="User"/>.
 	/// </typeparam>
-	/// <typeparam name="ST">
-	/// The type of state transitions, derived from <see cref="StateTransition{U}"/>.
+	/// <typeparam name="BST">
+	/// The base type of the system's state transitions, derived from <see cref="StateTransition{U}"/>.
 	/// </typeparam>
 	/// <typeparam name="A">The type of accounts, derived from <see cref="Account{U}"/>.</typeparam>
 	/// <typeparam name="P">The type of the postings, derived from <see cref="Posting{U, A}"/>.</typeparam>
@@ -34,14 +34,14 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// The global cascade delete convention is turned off. When needed, please enable
 	/// cascade delete on a per entity basis by overriding <see cref="OnModelCreating(DbModelBuilder)"/>.
 	/// </remarks>
-	public abstract class EFDomosDomainContainer<U, ST, A, P, R, J> 
-		: EFWorkflowUsersDomainContainer<U, ST>, IDomosDomainContainer<U, ST, A, P, R, J>
+	public abstract class EFDomosDomainContainer<U, BST, A, P, R, J> 
+		: EFWorkflowUsersDomainContainer<U, BST>, IDomosDomainContainer<U, BST, A, P, R, J>
 		where U : User
-		where ST : StateTransition<U>
+		where BST : StateTransition<U>
 		where A : Account<U>
 		where P : Posting<U, A>
 		where R : Remittance<U, A>
-		where J : Journal<U, ST, A, P, R>
+		where J : Journal<U, BST, A, P, R>
 	{
 		#region Construction
 
