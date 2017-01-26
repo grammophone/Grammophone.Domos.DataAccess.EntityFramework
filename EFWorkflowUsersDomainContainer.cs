@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure.Annotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -138,6 +140,38 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.HasMany(st => st.OwningUsers)
 				.WithMany()
 				.Map(m => m.ToTable("StateTransitionsToOwners"));
+
+			#endregion
+
+			#region WorkflowGraph
+
+			modelBuilder.Entity<WorkflowGraph>()
+				.Property(wg => wg.CodeName)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_WorkflowGraph_CodeName") { IsUnique = true }));
+
+			#endregion
+
+			#region StateGroup
+
+			modelBuilder.Entity<StateGroup>()
+				.Property(sg => sg.CodeName)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_StateGroup_CodeName") { IsUnique = true }));
+
+			#endregion
+
+			#region State
+
+			modelBuilder.Entity<State>()
+				.Property(s => s.CodeName)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_State_CodeName") { IsUnique = true }));
+
+			#endregion
+
+			#region StatePath
+
+			modelBuilder.Entity<StatePath>()
+				.Property(sp => sp.CodeName)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_StatePath_CodeName") { IsUnique = true }));
 
 			#endregion
 		}
