@@ -135,6 +135,16 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// </summary>
 		public IDbSet<R> Remittances { get; set; }
 
+		/// <summary>
+		/// The Electronic Funds Transfer (EFT/ACH) requests in the system.
+		/// </summary>
+		public IDbSet<FundsTransferRequest> FundsTransferRequests { get; set; }
+
+		/// <summary>
+		/// The events taking place for <see cref="FundsTransferRequests"/> in the system.
+		/// </summary>
+		public IDbSet<FundsTransferEvent> FundsTransferEvents { get; set; }
+
 		#endregion
 
 		#region Protected methods
@@ -221,6 +231,50 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.HasMany(r => r.OwningUsers)
 				.WithMany()
 				.Map(m => m.ToTable("RemittancesToOwners"));
+
+			#endregion
+
+			#region FundsTransferEvent
+
+			modelBuilder.Entity<FundsTransferEvent>()
+				.Property(fte => fte.TraceCode)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferEvent_TraceCode")));
+
+			modelBuilder.Entity<FundsTransferEvent>()
+				.Property(fte => fte.ResponseCode)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferEvent_ResponseCode")));
+
+			modelBuilder.Entity<FundsTransferEvent>()
+				.Property(fte => fte.Type)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferEvent_Type_ResponseCode", 1)));
+
+			modelBuilder.Entity<FundsTransferEvent>()
+				.Property(fte => fte.ResponseCode)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferEvent_Type_ResponseCode", 2)));
+
+			modelBuilder.Entity<FundsTransferEvent>()
+				.Property(fte => fte.Date)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferEvent_Date")));
+
+			#endregion
+
+			#region FundsTransferRequest
+
+			modelBuilder.Entity<FundsTransferRequest>()
+				.Property(ftr => ftr.TransactionID)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_TransactionID_LineID", 1)));
+
+			modelBuilder.Entity<FundsTransferRequest>()
+				.Property(ftr => ftr.LineID)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_TransactionID_LineID", 2)));
+
+			modelBuilder.Entity<FundsTransferRequest>()
+				.Property(ftr => ftr.State)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_State")));
+
+			modelBuilder.Entity<FundsTransferRequest>()
+				.Property(ftr => ftr.Date)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_Date")));
 
 			#endregion
 		}
