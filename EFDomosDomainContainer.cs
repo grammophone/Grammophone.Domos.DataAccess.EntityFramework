@@ -217,11 +217,17 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 
 			modelBuilder.Entity<R>()
 				.Property(r => r.TransactionID)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Remittance_TransactionID_LineID", 1) { IsUnique = true }));
+				.HasColumnAnnotation("Index", new IndexAnnotation(
+					new IndexAttribute("IX_Remittance_TransactionID_CreditSystemID", 1) { IsUnique = true }));
 
 			modelBuilder.Entity<R>()
-				.Property(r => r.LineID)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Remittance_TransactionID_LineID", 2) { IsUnique = true }));
+				.Property(r => r.CreditSystemID)
+				.HasColumnAnnotation("Index", new IndexAnnotation(
+					new IndexAttribute("IX_Remittance_TransactionID_CreditSystemID", 2) { IsUnique = true }));
+
+			modelBuilder.Entity<R>()
+				.Property(r => r.BatchID)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Remittance_BatchID")));
 
 			modelBuilder.Entity<R>()
 				.Property(r => r.CreationDate)
@@ -261,12 +267,18 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 			#region FundsTransferRequest
 
 			modelBuilder.Entity<FundsTransferRequest>()
-				.Property(ftr => ftr.TransactionID)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_TransactionID_LineID", 1)));
+				.Property(ftr => ftr.BatchID)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_BatchID")));
 
 			modelBuilder.Entity<FundsTransferRequest>()
-				.Property(ftr => ftr.LineID)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_TransactionID_LineID", 2)));
+				.Property(ftr => ftr.TransactionID)
+				.HasColumnAnnotation("Index", new IndexAnnotation(
+					new IndexAttribute("IX_FundsTransferRequest_TransactionID_CreditSystemID", 1) { IsUnique = true }));
+
+			modelBuilder.Entity<FundsTransferRequest>()
+				.Property(ftr => ftr.CreditSystemID)
+				.HasColumnAnnotation("Index", new IndexAnnotation(
+					new IndexAttribute("IX_FundsTransferRequest_TransactionID_CreditSystemID", 2) { IsUnique = true }));
 
 			modelBuilder.Entity<FundsTransferRequest>()
 				.Property(ftr => ftr.State)
