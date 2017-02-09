@@ -284,10 +284,6 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.Property(ftr => ftr.State)
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_State")));
 
-			modelBuilder.Entity<FundsTransferRequest>()
-				.Property(ftr => ftr.Date)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_Date")));
-
 			#endregion
 		}
 
