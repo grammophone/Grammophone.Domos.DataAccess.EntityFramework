@@ -120,9 +120,9 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		public IDbSet<ContentType> ContentTypes { get; set; }
 
 		/// <summary>
-		/// The files in the system.
+		/// The disposition types in the system.
 		/// </summary>
-		public IDbSet<File> Files { get; set; }
+		public IDbSet<DispositionType> DispositionTypes { get; set; }
 
 		#endregion
 
