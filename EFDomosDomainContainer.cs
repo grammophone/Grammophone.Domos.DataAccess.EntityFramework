@@ -24,24 +24,22 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// <typeparam name="BST">
 	/// The base type of the system's state transitions, derived from <see cref="StateTransition{U}"/>.
 	/// </typeparam>
-	/// <typeparam name="A">The type of accounts, derived from <see cref="Account{U}"/>.</typeparam>
-	/// <typeparam name="P">The type of the postings, derived from <see cref="Posting{U, A}"/>.</typeparam>
-	/// <typeparam name="R">The type of remittances, derived from <see cref="Remittance{U, A}"/>.</typeparam>
+	/// <typeparam name="P">The type of the postings, derived from <see cref="Posting{U}"/>.</typeparam>
+	/// <typeparam name="R">The type of remittances, derived from <see cref="Remittance{U}"/>.</typeparam>
 	/// <typeparam name="J">
-	/// The type of accounting journals, derived from <see cref="Journal{U, ST, A, P, R}"/>.
+	/// The type of accounting journals, derived from <see cref="Journal{U, ST, P, R}"/>.
 	/// </typeparam>
 	/// <remarks>
 	/// The global cascade delete convention is turned off. When needed, please enable
 	/// cascade delete on a per entity basis by overriding <see cref="OnModelCreating(DbModelBuilder)"/>.
 	/// </remarks>
-	public abstract class EFDomosDomainContainer<U, BST, A, P, R, J> 
-		: EFWorkflowUsersDomainContainer<U, BST>, IDomosDomainContainer<U, BST, A, P, R, J>
+	public abstract class EFDomosDomainContainer<U, BST, P, R, J> 
+		: EFWorkflowUsersDomainContainer<U, BST>, IDomosDomainContainer<U, BST, P, R, J>
 		where U : User
 		where BST : StateTransition<U>
-		where A : Account<U>
-		where P : Posting<U, A>
-		where R : Remittance<U, A>
-		where J : Journal<U, BST, A, P, R>
+		where P : Posting<U>
+		where R : Remittance<U>
+		where J : Journal<U, BST, P, R>
 	{
 		#region Construction
 
@@ -113,7 +111,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// <summary>
 		/// Entity set of accounts in the system.
 		/// </summary>
-		public IDbSet<A> Accounts { get; set; }
+		public IDbSet<Account> Accounts { get; set; }
 
 		/// <summary>
 		/// Entity set of credit systems in the system.
@@ -155,19 +153,6 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
-
-			#region Account
-
-			modelBuilder.Entity<A>()
-				.HasMany(a => a.OwningUsers)
-				.WithMany()
-				.Map(m => m.ToTable("AccountsToOwners"));
-
-			modelBuilder.Entity<A>()
-				.Property(a => a.LastModificationDate)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Account_LastModificationDate")));
-
-			#endregion
 
 			#region CreditSystem
 
