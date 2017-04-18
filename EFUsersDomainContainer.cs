@@ -162,7 +162,13 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 
 			modelBuilder.Entity<User>()
 				.HasMany(u => u.Dispositions)
-				.WithRequired(d => d.OwningUser);
+				.WithRequired(d => d.OwningUser)
+				.WillCascadeOnDelete();
+
+			modelBuilder.Entity<User>()
+				.HasMany(u => u.Registrations)
+				.WithRequired(r => r.User)
+				.WillCascadeOnDelete();
 
 			#endregion
 
