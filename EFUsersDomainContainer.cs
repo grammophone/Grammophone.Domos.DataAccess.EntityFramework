@@ -135,12 +135,6 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		{
 			base.OnModelCreating(modelBuilder);
 
-			#region Global conventions
-
-			modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-
-			#endregion
-
 			#region User
 
 			modelBuilder.Entity<U>()
