@@ -134,15 +134,6 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		{
 			base.OnModelCreating(modelBuilder);
 
-			#region StateTransition
-
-			modelBuilder.Entity<BST>()
-				.HasMany(st => st.OwningUsers)
-				.WithMany()
-				.Map(m => m.ToTable("StateTransitionsToOwners"));
-
-			#endregion
-
 			#region WorkflowGraph
 
 			modelBuilder.Entity<WorkflowGraph>()
