@@ -168,11 +168,6 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.Property(p => p.CreationDate)
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Journal_CreationDate")));
 
-			modelBuilder.Entity<J>()
-				.HasMany(j => j.OwningUsers)
-				.WithMany()
-				.Map(m => m.ToTable("JournalsToOwners"));
-
 			#endregion
 
 			#region Posting
@@ -185,11 +180,6 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 			modelBuilder.Entity<P>()
 				.Property(p => p.CreationDate)
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Posting_CreationDate")));
-
-			modelBuilder.Entity<P>()
-				.HasMany(p => p.OwningUsers)
-				.WithMany()
-				.Map(m => m.ToTable("PostingsToOwners"));
 
 			#endregion
 
@@ -217,11 +207,6 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 			modelBuilder.Entity<R>()
 				.Property(r => r.CreationDate)
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Remittance_CreationDate")));
-
-			modelBuilder.Entity<R>()
-				.HasMany(r => r.OwningUsers)
-				.WithMany()
-				.Map(m => m.ToTable("RemittancesToOwners"));
 
 			#endregion
 
