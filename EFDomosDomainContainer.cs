@@ -143,6 +143,16 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// </summary>
 		public IDbSet<FundsTransferEvent> FundsTransferEvents { get; set; }
 
+		/// <summary>
+		/// Batches of <see cref="FundsTransferRequest"/>s.
+		/// </summary>
+		public IDbSet<FundsTransferRequestBatch> FundsTransferRequestBatches { get; set; }
+
+		/// <summary>
+		/// Collations of <see cref="FundsTransferEventCollation"/>s.
+		/// </summary>
+		public IDbSet<FundsTransferEventCollation> FundsTransferEventCollations { get; set; }
+
 		#endregion
 
 		#region Protected methods
