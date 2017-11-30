@@ -153,12 +153,6 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// </summary>
 		public IDbSet<FundsTransferEventCollation> FundsTransferEventCollations { get; set; }
 
-		/// <summary>
-		/// Recordings of attempts of executions of workflow state paths
-		/// associated with <see cref="FundsTransferEvents"/>s.
-		/// </summary>
-		public IDbSet<WorkflowExecution> WorkflowExecutions { get; set; }
-
 		#endregion
 
 		#region Protected methods
