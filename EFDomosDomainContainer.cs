@@ -146,7 +146,12 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// <summary>
 		/// Batches of <see cref="FundsTransferRequest"/>s.
 		/// </summary>
-		public IDbSet<FundsTransferRequestBatch> FundsTransferRequestBatches { get; set; }
+		public IDbSet<FundsTransferBatch> FundsTransferBatches { get; set; }
+
+		/// <summary>
+		/// Events recording the history of <see cref="FundsTransferBatches"/>.
+		/// </summary>
+		public IDbSet<FundsTransferBatchEvent> FundsTransferBatchEvents { get; set; }
 
 		/// <summary>
 		/// Collations of <see cref="FundsTransferEventCollation"/>s.
@@ -253,16 +258,27 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 			modelBuilder.Entity<FundsTransferRequest>()
 				.Property(ftr => ftr.TransactionID)
 				.HasColumnAnnotation("Index", new IndexAnnotation(
-					new IndexAttribute("IX_FundsTransferRequest_TransactionID_CreditSystemID", 1) { IsUnique = true }));
-
-			modelBuilder.Entity<FundsTransferRequest>()
-				.Property(ftr => ftr.CreditSystemID)
-				.HasColumnAnnotation("Index", new IndexAnnotation(
-					new IndexAttribute("IX_FundsTransferRequest_TransactionID_CreditSystemID", 2) { IsUnique = true }));
+					new IndexAttribute("IX_FundsTransferRequest_TransactionID") { IsUnique = true }));
 
 			modelBuilder.Entity<FundsTransferRequest>()
 				.Property(ftr => ftr.State)
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_State")));
+
+			#endregion
+
+			#region FundsTransferBatch
+
+			modelBuilder.Entity<FundsTransferBatch>()
+				.Property(ftb => ftb.CreationDate)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatch_CreationDate")));
+
+			#endregion
+
+			#region FundsTransferBatchEvent
+
+			modelBuilder.Entity<FundsTransferBatchEvent>()
+				.Property(ftbe => ftbe.CreationDate)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatchEvent_CreationDate")));
 
 			#endregion
 		}
