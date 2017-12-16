@@ -149,14 +149,9 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		public IDbSet<FundsTransferBatch> FundsTransferBatches { get; set; }
 
 		/// <summary>
-		/// Events recording the history of <see cref="FundsTransferBatches"/>.
+		/// Messages recording the history of <see cref="FundsTransferBatches"/>.
 		/// </summary>
-		public IDbSet<FundsTransferBatchEvent> FundsTransferBatchEvents { get; set; }
-
-		/// <summary>
-		/// Collations of <see cref="FundsTransferEventCollation"/>s.
-		/// </summary>
-		public IDbSet<FundsTransferEventCollation> FundsTransferEventCollations { get; set; }
+		public IDbSet<FundsTransferBatchMessage> FundsTransferBatchMessages { get; set; }
 
 		#endregion
 
@@ -244,12 +239,16 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferEvent_Type_ResponseCode", 2)));
 
 			modelBuilder.Entity<FundsTransferEvent>()
-				.Property(fte => fte.Date)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferEvent_Date")));
+				.Property(fte => fte.Time)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferEvent_Time")));
 
 			#endregion
 
 			#region FundsTransferRequest
+
+			modelBuilder.Entity<FundsTransferRequest>()
+				.Property(ftr => ftr.CreationDate)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_CreationDate")));
 
 			modelBuilder.Entity<FundsTransferRequest>()
 				.Property(ftr => ftr.BatchID)
@@ -276,9 +275,9 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 
 			#region FundsTransferBatchEvent
 
-			modelBuilder.Entity<FundsTransferBatchEvent>()
-				.Property(ftbe => ftbe.CreationDate)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatchEvent_CreationDate")));
+			modelBuilder.Entity<FundsTransferBatchMessage>()
+				.Property(ftbe => ftbe.Time)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatchEvent_Time")));
 
 			#endregion
 		}
