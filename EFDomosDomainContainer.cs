@@ -279,6 +279,10 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.Property(ftbe => ftbe.Time)
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatchEvent_Time")));
 
+			modelBuilder.Entity<FundsTransferBatchMessage>()
+				.Property(ftbe => ftbe.MessageCode)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatchEvent_MessageCode")));
+
 			#endregion
 		}
 
