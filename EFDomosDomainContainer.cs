@@ -256,9 +256,9 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_CreationDate")));
 
 			modelBuilder.Entity<FundsTransferRequest>()
-				.Property(ftr => ftr.TransactionID)
+				.Property(ftr => ftr.GUID)
 				.HasColumnAnnotation("Index", new IndexAnnotation(
-					new IndexAttribute("IX_FundsTransferRequest_TransactionID") { IsUnique = true }));
+					new IndexAttribute("IX_FundsTransferRequest_GUID") { IsUnique = true }));
 
 			modelBuilder.Entity<FundsTransferRequest>()
 				.Property(ftr => ftr.State)
@@ -296,17 +296,25 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.Property(ftb => ftb.CreationDate)
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatch_CreationDate")));
 
+			modelBuilder.Entity<FundsTransferBatch>()
+				.Property(ftb => ftb.GUID)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatch_GIUD") { IsUnique = true }));
+
 			#endregion
 
-			#region FundsTransferBatchEvent
+			#region FundsTransferBatchMessage
 
 			modelBuilder.Entity<FundsTransferBatchMessage>()
-				.Property(ftbe => ftbe.Time)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatchEvent_Time")));
+				.Property(ftbm => ftbm.Time)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatchMessage_Time")));
 
 			modelBuilder.Entity<FundsTransferBatchMessage>()
-				.Property(ftbe => ftbe.MessageCode)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatchEvent_MessageCode")));
+				.Property(ftbm => ftbm.MessageCode)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatchMessageCode")));
+
+			modelBuilder.Entity<FundsTransferBatchMessage>()
+				.Property(ftbm => ftbm.GUID)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatchMessage_GUID") { IsUnique = true }));
 
 			#endregion
 		}
