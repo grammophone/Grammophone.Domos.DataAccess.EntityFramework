@@ -278,23 +278,27 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 
 			modelBuilder.Entity<FundsTransferRequestGroup>()
 				.Property(ftrg => ftrg.EncryptedBankAccountInfo.EncryptedAccountNumber)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequestGroup_EncryptedBankingInfo", 1)));
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequestGroup_EncryptedBankingInfo_AccountHolderName", 1)));
 
 			modelBuilder.Entity<FundsTransferRequestGroup>()
 				.Property(ftrg => ftrg.EncryptedBankAccountInfo.EncryptedTransitNumber)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequestGroup_EncryptedBankingInfo", 2)));
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequestGroup_EncryptedBankingInfo_AccountHolderName", 2)));
 
 			modelBuilder.Entity<FundsTransferRequestGroup>()
 				.Property(ftrg => ftrg.EncryptedBankAccountInfo.Type)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequestGroup_EncryptedBankingInfo", 3)));
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequestGroup_EncryptedBankingInfo_AccountHolderName", 3)));
 
 			modelBuilder.Entity<FundsTransferRequestGroup>()
 				.Property(ftrg => ftrg.EncryptedBankAccountInfo.BankNumber)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequestGroup_EncryptedBankingInfo", 4)));
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequestGroup_EncryptedBankingInfo_AccountHolderName", 4)));
 
 			modelBuilder.Entity<FundsTransferRequestGroup>()
 				.Property(ftrg => ftrg.EncryptedBankAccountInfo.AccountCode)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequestGroup_EncryptedBankingInfo", 5)));
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequestGroup_EncryptedBankingInfo_AccountHolderName", 5)));
+
+			modelBuilder.Entity<FundsTransferRequestGroup>()
+				.Property(ftrg => ftrg.AccountHolderName)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequestGroup_EncryptedBankingInfo_AccountHolderName", 6)));
 
 			#endregion
 
