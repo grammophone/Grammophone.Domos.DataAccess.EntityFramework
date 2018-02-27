@@ -264,6 +264,14 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.Property(ftr => ftr.State)
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_State")));
 
+			modelBuilder.Entity<FundsTransferRequest>()
+				.Property(ftr => ftr.BatchID)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_BatchID_GroupID", 1)));
+
+			modelBuilder.Entity<FundsTransferRequest>()
+				.Property(ftr => ftr.GroupID)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_BatchID_GroupID", 2)));
+
 			#endregion
 
 			#region FundsTransferRequestGroup
