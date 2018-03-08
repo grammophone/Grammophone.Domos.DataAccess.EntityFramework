@@ -322,7 +322,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 
 			modelBuilder.Entity<FundsTransferBatchMessage>()
 				.Property(ftbm => ftbm.MessageCode)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatchMessageCode")));
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferBatchMessage_MessageCode")));
 
 			modelBuilder.Entity<FundsTransferBatchMessage>()
 				.Property(ftbm => ftbm.GUID)
