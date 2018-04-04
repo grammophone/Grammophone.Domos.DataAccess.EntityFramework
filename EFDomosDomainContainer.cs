@@ -333,4 +333,165 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 
 		#endregion
 	}
+
+	/// <summary>
+	/// Entity Framework implementation of a Domos repository,
+	/// containing users, roles, accounting, workflow, managers and permissions.
+	/// </summary>
+	/// <typeparam name="U">
+	/// The type of users. Must be derived from <see cref="User"/>.
+	/// </typeparam>
+	/// <typeparam name="BST">
+	/// The base type of the system's state transitions, derived from <see cref="StateTransition{U}"/>.
+	/// </typeparam>
+	/// <typeparam name="P">The type of the postings, derived from <see cref="Posting{U}"/>.</typeparam>
+	/// <typeparam name="R">The type of remittances, derived from <see cref="Remittance{U}"/>.</typeparam>
+	/// <typeparam name="J">
+	/// The type of accounting journals, derived from <see cref="Journal{U, ST, P, R}"/>.
+	/// </typeparam>
+	/// <remarks>
+	/// The global cascade delete convention is turned off. When needed, please enable
+	/// cascade delete on a per entity basis by overriding <see cref="OnModelCreating(DbModelBuilder)"/>.
+	/// </remarks>
+	/// <typeparam name="ILTC">The type of invoice line tax components, derived from <see cref="InvoiceLineTaxComponent{U, P, R}"/>.</typeparam>
+	/// <typeparam name="IL">The type of invoice line, derived from <see cref="InvoiceLine{U, P, R, ILTC}"/>.</typeparam>
+	/// <typeparam name="IE">The type of invoice event, derived from <see cref="InvoiceEvent{U, P, R}"/>.</typeparam>
+	/// <typeparam name="I">The type of invoices, derived from <see cref="Invoice{U, P, R, ILTC, IL, IE}"/>.</typeparam>
+	public abstract class EFDomosDomainContainer<U, BST, P, R, J, ILTC, IL, IE, I>
+		: EFDomosDomainContainer<U, BST, P, R, J>, IDomosDomainContainer<U, BST, P, R, J, ILTC, IL, IE, I>
+		where U : User
+		where BST : StateTransition<U>
+		where P : Posting<U>
+		where R : Remittance<U>
+		where J : Journal<U, BST, P, R>
+		where ILTC : InvoiceLineTaxComponent<U, P, R>
+		where IL : InvoiceLine<U, P, R, ILTC>
+		where IE : InvoiceEvent<U, P, R>
+		where I : Invoice<U, P, R, ILTC, IL, IE>
+	{
+		#region Construction
+
+		/// <summary>
+		/// Constructs a new container instance using conventions to 
+		/// create the name of the database to which a connection will be made.
+		/// The by-convention name is the full name (namespace + class name)
+		/// of the derived container class.
+		/// The <see cref="TransactionMode"/> is set to <see cref="TransactionMode.Real"/>.
+		/// </summary>
+		public EFDomosDomainContainer()
+		{
+		}
+
+		/// <summary>
+		/// Constructs a new container instance using conventions to 
+		/// create the name of the database to which a connection will be made.
+		/// The by-convention name is the full name (namespace + class name)
+		/// of the derived container class.
+		/// </summary>
+		/// <param name="transactionMode">The transaction behavior.</param>
+		public EFDomosDomainContainer(TransactionMode transactionMode)
+			: base(transactionMode)
+		{
+		}
+
+		/// <summary>
+		/// Constructs a new container instance using the given string as the name
+		/// or connection string for the database to which a connection will be made. 
+		/// The <see cref="TransactionMode"/> is set to <see cref="TransactionMode.Real"/>.
+		/// </summary>
+		/// <param name="nameOrConnectionString">
+		/// Either the database name or a connection string.
+		/// </param>
+		public EFDomosDomainContainer(string nameOrConnectionString)
+			: base(nameOrConnectionString)
+		{
+
+		}
+
+		/// <summary>
+		/// Constructs a new container instance using the given string as the name
+		/// or connection string for the database to which a connection will be made. 
+		/// </summary>
+		/// <param name="nameOrConnectionString">
+		/// Either the database name or a connection string.
+		/// </param>
+		/// <param name="transactionMode">The transaction behavior.</param>
+		public EFDomosDomainContainer(string nameOrConnectionString, TransactionMode transactionMode)
+			: base(nameOrConnectionString, transactionMode)
+		{
+		}
+
+		/// <summary>
+		/// Constructs a new container instance using a given connection.
+		/// </summary>
+		/// <param name="connection">The connection to use.</param>
+		/// <param name="ownTheConnection">If true, hand over connection ownership to the container.</param>
+		/// <param name="transactionMode">The transaction behavior.</param>
+		public EFDomosDomainContainer(System.Data.Common.DbConnection connection, bool ownTheConnection, TransactionMode transactionMode)
+			: base(connection, ownTheConnection, transactionMode)
+		{
+		}
+
+		#endregion
+
+		#region Public properties
+
+		/// <summary>
+		/// The set of invoices in the system.
+		/// </summary>
+		public IDbSet<I> Invoices { get; set; }
+
+		/// <summary>
+		/// The set of invoice events in the system.
+		/// </summary>
+		public IDbSet<IE> InvoiceEvents { get; set; }
+
+		/// <summary>
+		/// The set of invoice lines in the system.
+		/// </summary>
+		public IDbSet<IL> InvoiceLines { get; set; }
+
+		/// <summary>
+		/// The set of invoice line tax components in the system.
+		/// </summary>
+		public IDbSet<ILTC> InvoiceLineTaxComponents { get; set; }
+
+		#endregion
+
+		#region Protected methods
+
+		/// <summary>
+		/// Add indexes and other non-implied database artifacts.
+		/// </summary>
+		protected override void OnModelCreating(DbModelBuilder modelBuilder)
+		{
+			base.OnModelCreating(modelBuilder);
+
+			#region Invoice
+
+			modelBuilder.Entity<I>()
+				.Property(i => i.IssueDate)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Invoice_IssueDate")));
+
+			modelBuilder.Entity<I>()
+				.Property(i => i.DueDate)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Invoice_DueDate")));
+
+			#endregion
+
+			#region InvoiceEvent
+
+			modelBuilder.Entity<IE>()
+				.Property(ie => ie.Time)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_InvoiceEvent_Time")));
+
+			modelBuilder.Entity<IE>()
+				.Property(ie => ie.InvoiceState)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_InvoiceEvent_InvoiceState")));
+
+			#endregion
+		}
+
+		#endregion
+	}
 }
