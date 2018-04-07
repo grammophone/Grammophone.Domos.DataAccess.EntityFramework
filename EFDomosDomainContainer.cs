@@ -477,6 +477,10 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.Property(i => i.DueDate)
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Invoice_DueDate")));
 
+			modelBuilder.Entity<I>() // many-to-many relationship with FundsTransferRequest.
+				.HasMany(i => i.ServicingFundsTransferRequests)
+				.WithMany();
+
 			#endregion
 
 			#region InvoiceEvent
