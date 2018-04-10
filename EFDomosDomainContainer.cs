@@ -481,6 +481,22 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.HasMany(i => i.ServicingFundsTransferRequests)
 				.WithMany();
 
+			modelBuilder.Entity<I>()
+				.HasMany(i => i.Lines)
+				.WithRequired()
+				.HasForeignKey(l => l.InvoiceID)
+				.WillCascadeOnDelete(true);
+
+			#endregion
+
+			#region InvoiceLine
+
+			modelBuilder.Entity<IL>()
+				.HasMany(il => il.TaxComponents)
+				.WithRequired()
+				.HasForeignKey(iltc => iltc.LineID)
+				.WillCascadeOnDelete();
+
 			#endregion
 
 			#region InvoiceEvent
