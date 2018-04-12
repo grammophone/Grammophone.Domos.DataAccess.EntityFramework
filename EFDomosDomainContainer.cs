@@ -497,6 +497,22 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.HasForeignKey(iltc => iltc.LineID)
 				.WillCascadeOnDelete();
 
+			modelBuilder.Entity<IL>()
+				.Property(il => il.Rate)
+				.HasPrecision(19, 3);
+
+			modelBuilder.Entity<IL>()
+				.Property(il => il.Quantity)
+				.HasPrecision(19, 6);
+
+			#endregion
+
+			#region InvoiceLineTaxComponent
+
+			modelBuilder.Entity<ILTC>()
+				.Property(iltc => iltc.RatePercentFactor)
+				.HasPrecision(5, 3);
+
 			#endregion
 
 			#region InvoiceEvent
