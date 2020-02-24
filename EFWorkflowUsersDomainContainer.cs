@@ -137,24 +137,30 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 			#region WorkflowGraph
 
 			modelBuilder.Entity<WorkflowGraph>()
-				.Property(wg => wg.CodeName)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_WorkflowGraph_CodeName") { IsUnique = true }));
+				.HasIndex(wg => wg.CodeName)
+				.IsUnique(true);
 
 			#endregion
 
 			#region StateGroup
 
+			//modelBuilder.Entity<StateGroup>()
+			//	.HasIndex(sg => new { sg.WorkflowGraphID, sg.CodeName })
+			//	.IsUnique(true);
+
 			modelBuilder.Entity<StateGroup>()
-				.Property(sg => sg.CodeName)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_StateGroup_CodeName") { IsUnique = true }));
+				.HasIndex(sg => sg.CodeName);
 
 			#endregion
 
 			#region State
 
+			//modelBuilder.Entity<State>()
+			//	.HasIndex(s => new { s.GroupID, s.CodeName })
+			//	.IsUnique(true);
+
 			modelBuilder.Entity<State>()
-				.Property(s => s.CodeName)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_State_CodeName") { IsUnique = true }));
+				.HasIndex(s => s.CodeName);
 
 			#endregion
 
