@@ -251,10 +251,6 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 			#region FundsTransferRequest
 
 			modelBuilder.Entity<FundsTransferRequest>()
-				.Property(ftr => ftr.CreationDate)
-				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_CreationDate")));
-
-			modelBuilder.Entity<FundsTransferRequest>()
 				.Property(ftr => ftr.GUID)
 				.HasColumnAnnotation("Index", new IndexAnnotation(
 					new IndexAttribute("IX_FundsTransferRequest_GUID") { IsUnique = true }));
@@ -269,6 +265,9 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 
 			modelBuilder.Entity<FundsTransferRequest>()
 				.HasIndex(ftr => new { ftr.Category, ftr.CreationDate });
+
+			modelBuilder.Entity<FundsTransferRequest>()
+				.HasIndex(ftr => ftr.CreationDate);
 
 			#endregion
 
