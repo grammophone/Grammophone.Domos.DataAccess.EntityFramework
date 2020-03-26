@@ -267,6 +267,9 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.Property(ftr => ftr.GroupID)
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequest_BatchID_GroupID", 2)));
 
+			modelBuilder.Entity<FundsTransferRequest>()
+				.HasIndex(ftr => new { ftr.Category, ftr.CreationDate });
+
 			#endregion
 
 			#region FundsTransferRequestGroup
