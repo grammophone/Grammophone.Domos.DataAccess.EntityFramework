@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{44448875-F6CC-49F2-8598-22BCF69FAEDB}</ProjectGuid>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472;netstandard2.1;</TargetFrameworks>
     <AssemblyTitle>Grammophone.Domos.DataAccess.EntityFramework</AssemblyTitle>
     <Product>Grammophone.Domos.DataAccess.EntityFramework</Product>
     <Copyright>Copyright ©  2016</Copyright>
-    <DocumentationFile>bin\$(Configuration)\Grammophone.Domos.DataAccess.EntityFramework.XML</DocumentationFile>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Grammophone.Domos.DataAccess.EntityFramework.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
