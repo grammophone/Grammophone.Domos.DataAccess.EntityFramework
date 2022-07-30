@@ -301,6 +301,10 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.Property(ftrg => ftrg.AccountHolderToken)
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequestGroup_EncryptedBankingInfo_AccountHolder", 7)));
 
+			modelBuilder.Entity<FundsTransferRequestGroup>()
+				.Property(ftrg => ftrg.EffectiveDate)
+				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_FundsTransferRequestGroup_EncryptedBankingInfo_AccountHolder", 8)));
+
 			#endregion
 
 			#region FundsTransferBatch
