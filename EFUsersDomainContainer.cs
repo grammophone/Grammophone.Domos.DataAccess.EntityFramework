@@ -124,6 +124,21 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// </summary>
 		public IDbSet<DispositionType> DispositionTypes { get; set; }
 
+		/// <summary>
+		/// The WebAuthn Users' Credentials stored in the system.
+		/// </summary>
+		public IDbSet<WebAuthnCredential> WebAuthnCredentials { get; set; }
+
+		/// <summary>
+		/// The Browser Sessions of the users.
+		/// </summary>
+		public IDbSet<BrowserSession> BrowserSessions { get; set; }
+
+		/// <summary>
+		/// The IP addresses of clients of the application.
+		/// </summary>
+		public IDbSet<ClientIpAddress> ClientIpAddresses { get; set; }
+
 		#endregion
 
 		#region Protected methods
@@ -191,6 +206,52 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 
 			// File is abstract; derive from it and define your own entity set.
 			modelBuilder.Ignore<File>();
+
+			#endregion
+
+			#region WebAuthnCredential
+
+			modelBuilder.Entity<WebAuthnCredential>()
+				.HasIndex(c => c.UserHandle);
+
+			modelBuilder.Entity<WebAuthnCredential>()
+				.HasIndex(c => c.CredentialId);
+
+			modelBuilder.Entity<WebAuthnCredential>()
+				.HasRequired(c => c.Owner)
+				.WithMany(u => u.WebAuthnCredentials);
+
+			#endregion
+
+			#region Client IP Addresses
+
+			modelBuilder.Entity<ClientIpAddress>()
+				.HasIndex(ipa => new { ipa.BrowserSessionID, ipa.LastSeen });
+
+			modelBuilder.Entity<ClientIpAddress>()
+				.HasIndex(ipa => ipa.LastSeen);
+
+			modelBuilder.Entity<ClientIpAddress>()
+				.HasIndex(ipa => ipa.IpAddress);
+
+			#endregion
+
+			#region Browser Sessions
+
+			modelBuilder.Entity<BrowserSession>()
+				.HasIndex(bs => bs.FingerPrint);
+
+			modelBuilder.Entity<BrowserSession>()
+				.HasIndex(bs => bs.LastSeenOn);
+
+			modelBuilder.Entity<BrowserSession>()
+				.HasIndex(bs => bs.FirstSignInOn);
+
+			modelBuilder.Entity<BrowserSession>()
+				.HasIndex(bs => new { bs.UserID, bs.LastSeenOn });
+
+			modelBuilder.Entity<BrowserSession>()
+				.HasIndex(bs => new { bs.UserID, bs.FirstSignInOn });
 
 			#endregion
 		}
