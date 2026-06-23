@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Grammophone.DataAccess;
 using Grammophone.DataAccess.EntityFramework;
+using Grammophone.DataAccess.EntityFramework.Plus;
 using Grammophone.Domos.Domain;
 using Grammophone.Domos.Domain.Files;
 
@@ -25,7 +26,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// The global cascade delete convention is turned off. When needed, please enable
 	/// cascade delete on a per entity basis by overriding <see cref="OnModelCreating(DbModelBuilder)"/>.
 	/// </remarks>
-	public class EFUsersDomainContainer<U> : EFDomainContainer
+	public class EFUsersDomainContainer<U> : EFDomainContainerPlus
 		where U : User
 	{
 		#region Construction
