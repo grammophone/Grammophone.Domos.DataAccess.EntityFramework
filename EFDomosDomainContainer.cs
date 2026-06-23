@@ -33,7 +33,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// cascade delete on a per entity basis by overriding <see cref="OnModelCreating(DbModelBuilder)"/>.
 	/// </remarks>
 	public abstract class EFDomosDomainContainer<U, BST, P, R, J> 
-		: EFWorkflowUsersDomainContainer<U, BST>, IDomosDomainContainer<U, BST, P, R, J>
+		: EFWorkflowUsersDomainContainer<U, BST>
 		where U : User
 		where BST : StateTransition<U>
 		where P : Posting<U>
@@ -110,52 +110,52 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// <summary>
 		/// Entity set of accounts in the system.
 		/// </summary>
-		public IDbSet<Account> Accounts { get; set; }
+		public DbSet<Account> Accounts { get; set; }
 
 		/// <summary>
 		/// Entity set of credit systems in the system.
 		/// </summary>
-		public IDbSet<CreditSystem> CreditSystems { get; set; }
+		public DbSet<CreditSystem> CreditSystems { get; set; }
 
 		/// <summary>
 		/// Entity set of accounting journals in the system.
 		/// </summary>
-		public IDbSet<J> Journals { get; set; }
+		public DbSet<J> Journals { get; set; }
 
 		/// <summary>
 		/// Entity set of the accounting postings in the system.
 		/// </summary>
-		public IDbSet<P> Postings { get; set; }
+		public DbSet<P> Postings { get; set; }
 
 		/// <summary>
 		/// Entity set of the accounting remittances in the system.
 		/// </summary>
-		public IDbSet<R> Remittances { get; set; }
+		public DbSet<R> Remittances { get; set; }
 
 		/// <summary>
 		/// The Electronic Funds Transfer (EFT/ACH) requests in the system.
 		/// </summary>
-		public IDbSet<FundsTransferRequest> FundsTransferRequests { get; set; }
+		public DbSet<FundsTransferRequest> FundsTransferRequests { get; set; }
 
 		/// <summary>
 		/// The events taking place for <see cref="FundsTransferRequests"/> in the system.
 		/// </summary>
-		public IDbSet<FundsTransferEvent> FundsTransferEvents { get; set; }
+		public DbSet<FundsTransferEvent> FundsTransferEvents { get; set; }
 
 		/// <summary>
 		/// Batches of <see cref="FundsTransferRequest"/>s.
 		/// </summary>
-		public IDbSet<FundsTransferBatch> FundsTransferBatches { get; set; }
+		public DbSet<FundsTransferBatch> FundsTransferBatches { get; set; }
 
 		/// <summary>
 		/// Messages recording the history of <see cref="FundsTransferBatches"/>.
 		/// </summary>
-		public IDbSet<FundsTransferBatchMessage> FundsTransferBatchMessages { get; set; }
+		public DbSet<FundsTransferBatchMessage> FundsTransferBatchMessages { get; set; }
 
 		/// <summary>
 		/// The set of funds transfer request groups in the system.
 		/// </summary>
-		public IDbSet<FundsTransferRequestGroup> FundsTransferRequestGroups { get; set; }
+		public DbSet<FundsTransferRequestGroup> FundsTransferRequestGroups { get; set; }
 
 		#endregion
 
@@ -363,7 +363,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// <typeparam name="IE">The type of invoice event, derived from <see cref="InvoiceEvent{U, P, R}"/>.</typeparam>
 	/// <typeparam name="I">The type of invoices, derived from <see cref="Invoice{U, P, R, ILTC, IL, IE}"/>.</typeparam>
 	public abstract class EFDomosDomainContainer<U, BST, P, R, J, ILTC, IL, IE, I>
-		: EFDomosDomainContainer<U, BST, P, R, J>, IDomosDomainContainer<U, BST, P, R, J, ILTC, IL, IE, I>
+		: EFDomosDomainContainer<U, BST, P, R, J>
 		where U : User
 		where BST : StateTransition<U>
 		where P : Posting<U>
@@ -444,22 +444,22 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// <summary>
 		/// The set of invoices in the system.
 		/// </summary>
-		public IDbSet<I> Invoices { get; set; }
+		public DbSet<I> Invoices { get; set; }
 
 		/// <summary>
 		/// The set of invoice events in the system.
 		/// </summary>
-		public IDbSet<IE> InvoiceEvents { get; set; }
+		public DbSet<IE> InvoiceEvents { get; set; }
 
 		/// <summary>
 		/// The set of invoice lines in the system.
 		/// </summary>
-		public IDbSet<IL> InvoiceLines { get; set; }
+		public DbSet<IL> InvoiceLines { get; set; }
 
 		/// <summary>
 		/// The set of invoice line tax components in the system.
 		/// </summary>
-		public IDbSet<ILTC> InvoiceLineTaxComponents { get; set; }
+		public DbSet<ILTC> InvoiceLineTaxComponents { get; set; }
 
 		#endregion
 

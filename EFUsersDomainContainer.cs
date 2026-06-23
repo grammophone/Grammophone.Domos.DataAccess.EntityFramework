@@ -25,7 +25,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// The global cascade delete convention is turned off. When needed, please enable
 	/// cascade delete on a per entity basis by overriding <see cref="OnModelCreating(DbModelBuilder)"/>.
 	/// </remarks>
-	public class EFUsersDomainContainer<U> : EFDomainContainer, IUsersDomainContainer<U>
+	public class EFUsersDomainContainer<U> : EFDomainContainer
 		where U : User
 	{
 		#region Construction
@@ -97,47 +97,47 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// <summary>
 		/// Entity set of users in the system.
 		/// </summary>
-		public IDbSet<U> Users { get; set; }
+		public DbSet<U> Users { get; set; }
 
 		/// <summary>
 		/// Entity set of registrations in the system.
 		/// </summary>
-		public IDbSet<Registration> Registrations { get; set; }
+		public DbSet<Registration> Registrations { get; set; }
 
 		/// <summary>
 		/// Entity set of roles in the system.
 		/// </summary>
-		public IDbSet<Role> Roles { get; set; }
+		public DbSet<Role> Roles { get; set; }
 
 		/// <summary>
 		/// Entity set of dispositions in the system.
 		/// </summary>
-		public IDbSet<Disposition> Dispositions { get; set; }
+		public DbSet<Disposition> Dispositions { get; set; }
 
 		/// <summary>
 		/// The MIME content types in the system.
 		/// </summary>
-		public IDbSet<ContentType> ContentTypes { get; set; }
+		public DbSet<ContentType> ContentTypes { get; set; }
 
 		/// <summary>
 		/// The disposition types in the system.
 		/// </summary>
-		public IDbSet<DispositionType> DispositionTypes { get; set; }
+		public DbSet<DispositionType> DispositionTypes { get; set; }
 
 		/// <summary>
 		/// The WebAuthn Users' Credentials stored in the system.
 		/// </summary>
-		public IDbSet<WebAuthnCredential> WebAuthnCredentials { get; set; }
+		public DbSet<WebAuthnCredential> WebAuthnCredentials { get; set; }
 
 		/// <summary>
 		/// The Browser Sessions of the users.
 		/// </summary>
-		public IDbSet<BrowserSession> BrowserSessions { get; set; }
+		public DbSet<BrowserSession> BrowserSessions { get; set; }
 
 		/// <summary>
 		/// The IP addresses of clients of the application.
 		/// </summary>
-		public IDbSet<ClientIpAddress> ClientIpAddresses { get; set; }
+		public DbSet<ClientIpAddress> ClientIpAddresses { get; set; }
 
 		#endregion
 

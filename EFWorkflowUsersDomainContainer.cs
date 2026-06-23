@@ -27,7 +27,7 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 	/// cascade delete on a per entity basis by overriding <see cref="OnModelCreating(DbModelBuilder)"/>.
 	/// </remarks>
 	public class EFWorkflowUsersDomainContainer<U, BST> 
-		: EFUsersDomainContainer<U>, IWorkflowUsersDomainContainer<U, BST>
+		: EFUsersDomainContainer<U>
 		where U : User
 		where BST : StateTransition<U>
 	{
@@ -101,27 +101,27 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 		/// <summary>
 		/// Entity set of workflow states in the system.
 		/// </summary>
-		public IDbSet<State> States { get; set; }
+		public DbSet<State> States { get; set; }
 
 		/// <summary>
 		/// Entity set of workflow state groups in the system.
 		/// </summary>
-		public IDbSet<StateGroup> StateGroups { get; set; }
+		public DbSet<StateGroup> StateGroups { get; set; }
 
 		/// <summary>
 		/// Entity set of workflow state paths in the system.
 		/// </summary>
-		public IDbSet<StatePath> StatePaths { get; set; }
+		public DbSet<StatePath> StatePaths { get; set; }
 
 		/// <summary>
 		/// Entity set of transitions occurred between workflow states in the system.
 		/// </summary>
-		public IDbSet<BST> StateTransitions { get; set; }
+		public DbSet<BST> StateTransitions { get; set; }
 
 		/// <summary>
 		/// Entity set of workflow graphs in the system.
 		/// </summary>
-		public IDbSet<WorkflowGraph> WorkflowGraphs { get; set; }
+		public DbSet<WorkflowGraph> WorkflowGraphs { get; set; }
 
 		#endregion
 

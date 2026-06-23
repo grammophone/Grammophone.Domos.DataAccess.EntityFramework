@@ -6,6 +6,7 @@
     <Product>Grammophone.Domos.DataAccess.EntityFramework</Product>
     <Copyright>Copyright ©  2016</Copyright>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<LangVersion>8.0</LangVersion>
 	</PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
