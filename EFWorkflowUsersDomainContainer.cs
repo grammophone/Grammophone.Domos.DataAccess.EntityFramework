@@ -171,6 +171,24 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 				.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_StatePath_CodeName") { IsUnique = true }));
 
 			#endregion
+
+			#region StateTransition
+
+			ConfigureStateTransition(modelBuilder);
+
+			#endregion
+		}
+
+		/// <summary>
+		/// Configures the 'FundsTransferEvent' navigation propoerty of StateTransition
+		/// to be ignored, as no accounting is supported in this base domain container.
+		/// </summary>
+		protected virtual void ConfigureStateTransition(DbModelBuilder modelBuilder)
+		{
+			/* Ignore the funds transfer event relation when no accounting is supported. */
+
+			modelBuilder.Entity<BST>().Ignore(st => st.FundsTransferEventID);
+			modelBuilder.Entity<BST>().Ignore(st => st.FundsTransferEvent);
 		}
 
 		#endregion
