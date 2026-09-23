@@ -269,6 +269,15 @@ namespace Grammophone.Domos.DataAccess.EntityFramework
 			modelBuilder.Entity<FundsTransferRequest>()
 				.HasIndex(ftr => ftr.CreationDate);
 
+			modelBuilder.Entity<FundsTransferRequest>()
+				.HasIndex(ftr => new { ftr.Category, ftr.ErrorAccountID, ftr.CreationDate });
+
+			modelBuilder.Entity<FundsTransferRequest>()
+				.HasIndex(ftr => new { ftr.Category, ftr.MainAccountID, ftr.CreationDate });
+
+			modelBuilder.Entity<FundsTransferRequest>()
+				.HasIndex(ftr => new { ftr.Category, ftr.TransferAccountID, ftr.CreationDate });
+
 			#endregion
 
 			#region FundsTransferRequestGroup
